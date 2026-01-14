@@ -121,8 +121,10 @@ fi
 [ -z "$root_uuid" ] && print_error "Cannot determine UUID of ${root_device}"
 
 # Root subvolume UUID
+# AA aksit ERROR => root_uuid_subvolume="$(btrfs subvolume show / 2>/dev/null | \
+# AA aksit ERROR =>                     awk -F':' '/^\s*UUID/ {gsub(/^[ \t]+/, "", $2); print $2}')"
 root_uuid_subvolume="$(btrfs subvolume show / 2>/dev/null | \
-                       awk -F':' '/^\s*UUID/ {gsub(/^[ \t]+/, "", $2); print $2}')"
+                                 awk '$1=="UUID:" {print $2}')"
 [ -z "$root_uuid_subvolume" ] && print_error "UUID of the root subvolume is not available"
 
 # ---------- Boot partition ----------
